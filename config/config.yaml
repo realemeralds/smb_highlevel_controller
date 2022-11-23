@@ -1,0 +1,6 @@
+sub_topic: scan
+pub_topic: cmd_vel
+queue_size: 10
+linear_controller_gain: 5
+angular_controller_gain: 1
+angle_tolerance: 0.05
