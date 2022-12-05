@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<launch>
+    <arg name="robot_description"  	default="robot_description"/>
+    <arg name="robot_namespace" 		default=""/>
+    <arg name="simulation" 			    default="true"/>
+    <arg name="description_name" value="$(arg robot_description)"/>
+    <arg name="description_file"    default="$(find smb_description)/urdf/smb_standalone.urdf.xacro"/>
+    <arg name="lidar"              default="true"/>   
+    <arg name="publish_tf"         default="false"/>
+    <arg name="wheel_joint_type" value="continuous"/>
+    <arg name="bagfile" default="/home/ras/Downloads/smb_navigation.bag" />
+
+<!-- Load the config -->
+    <param name="$(arg description_name)" command="$(find xacro)/xacro
+    $(arg description_file)
+    wheel_joint_type:=$(arg wheel_joint_type)
+    simulation:=$(arg simulation)
+    robot_namespace:=$(arg robot_namespace)
+    lidar:=$(arg lidar)
+    description_name_xacro:=$(arg description_name)
+    publish_tf:=$(arg publish_tf)"/>
+
+    <node name="ekf_se" pkg="robot_localization" type="ekf_localization_node" output="screen">
+        <rosparam command="load"
+            file="$(find smb_control)/config/localization.yaml" />
+    </node>
+
+    <node name="robot_state_publisher" pkg="robot_state_publisher" type="robot_state_publisher" output="screen">
+        <param name="robot_description" value="robot_description" />
+        <param name="joint_states" value="joint_states" />
+    </node>
+
+    <node pkg="tf" type="static_transform_publisher" name="link1_broadcaster" args="0 0 2 0 0 0 rslidar smb_top_view 100" />
+
+    <node pkg="rosbag" type="play" name="player" output="screen" args="--clock --rate=0.5 $(arg bagfile)"/>
+</launch>

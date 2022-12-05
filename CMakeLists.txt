@@ -14,6 +14,8 @@ add_definitions(-Wall -Werror)
 ## is used, also find other catkin packages
 find_package(catkin REQUIRED COMPONENTS
   roscpp
+  tf2_ros
+  std_srvs
   sensor_msgs
   geometry_msgs
   visualization_msgs
@@ -114,7 +116,7 @@ find_package(catkin REQUIRED COMPONENTS
 catkin_package(
  INCLUDE_DIRS include
 #  LIBRARIES smb_highlevel_controller
- CATKIN_DEPENDS roscpp sensor_msgs geometry_msgs visualization_msgs
+ CATKIN_DEPENDS roscpp tf2_ros std_srvs sensor_msgs geometry_msgs visualization_msgs
 #  DEPENDS system_lib
 )
 
@@ -147,6 +149,8 @@ include
 add_executable(${PROJECT_NAME}  
 src/${PROJECT_NAME}_node.cpp)
 
+add_executable(smb_proximity_stop
+src/smb_proximity_stop_node.cpp)
 ## Rename C++ executable without prefix
 ## The above recommended prefix causes long target names, the following renames the
 ## target back to the shorter version for ease of user use
@@ -159,6 +163,9 @@ src/${PROJECT_NAME}_node.cpp)
 
 ## Specify libraries to link a library or executable target against
 target_link_libraries(${PROJECT_NAME}
+  ${catkin_LIBRARIES}
+)
+target_link_libraries(smb_proximity_stop
   ${catkin_LIBRARIES}
 )
 

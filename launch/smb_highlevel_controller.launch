@@ -11,5 +11,11 @@
         <rosparam command="load"
             file="$(find smb_highlevel_controller)/config/config.yaml" />
     </node>
+
+    <!-- <node name="smb_proximity_stop" pkg="smb_highlevel_controller" type="smb_proximity_stop" output="screen">
+        <rosparam command="load"
+        file="$(find smb_highlevel_controller)/config/config.yaml" />
+    </node>  -->
+
     <node name="rviz" pkg="rviz" type="rviz" output="screen" />
 </launch>
